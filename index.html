@@ -3,65 +3,113 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mapa da Corrupção no Brasil · 1988–2026</title>
+<title>Atlas da Corrupção no Brasil · 1988–2026</title>
 <style>
-:root{--bg:#f5f6fa;--card:#fff;--tx:#151a2d;--mut:#667;--bd:#e1e5f0;--pri:#4f46e5;
---def:#b91c1c;--anu:#b45309;--inv:#1d4ed8;--arq:#6b7280}
-@media(prefers-color-scheme:dark){:root{--bg:#0d1020;--card:#161a2f;--tx:#eceffa;--mut:#9aa2c0;--bd:#262c4a;--pri:#8b85ff;
---def:#f87171;--anu:#fbbf24;--inv:#60a5fa;--arq:#9ca3af}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-header{padding:24px 16px 8px;max-width:1200px;margin:auto}h1{margin:0;font-size:26px}h1 span{color:var(--pri)}
-.aviso{background:var(--card);border:1px solid var(--bd);border-left:4px solid var(--anu);padding:10px 14px;border-radius:10px;margin-top:12px;font-size:13px;color:var(--mut)}
-.bar{max-width:1200px;margin:12px auto;padding:0 16px;display:flex;gap:8px;flex-wrap:wrap}
-.bar input,.bar select{padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--card);color:var(--tx);font-size:14px}
+:root{--bg:#f3f4fa;--bg2:#e8eaf6;--card:#ffffffcc;--tx:#12162b;--mut:#626a8a;--bd:#dfe3f2;--pri:#5046e5;--g:#16a34a;--pt:#9333ea;
+--def:#dc2626;--anu:#d97706;--inv:#2563eb;--arq:#6b7280;--glow:0 10px 40px #5046e522}
+@media(prefers-color-scheme:dark){:root{--bg:#090b18;--bg2:#12152b;--card:#151932cc;--tx:#eef0fc;--mut:#9aa3c7;--bd:#252b4d;--pri:#8b85ff;--g:#34d399;--pt:#c084fc;
+--def:#f87171;--anu:#fbbf24;--inv:#60a5fa;--arq:#9ca3af;--glow:0 10px 50px #8b85ff22}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(1200px 600px at 10% -10%,var(--bg2),transparent),var(--bg);color:var(--tx);font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1280px;margin:auto;padding:0 16px}
+header{padding:28px 0 8px}
+h1{margin:0;font-size:clamp(24px,4vw,38px);letter-spacing:-.02em;line-height:1.1}
+h1 span{background:linear-gradient(90deg,var(--pri),var(--pt));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mut);margin:8px 0 0;max-width:780px}
+.aviso{margin-top:14px;padding:10px 14px;border:1px solid var(--bd);border-left:4px solid var(--anu);border-radius:12px;background:var(--card);font-size:13px;color:var(--mut);backdrop-filter:blur(8px)}
+.nav{position:sticky;top:0;z-index:20;backdrop-filter:blur(14px);background:color-mix(in srgb,var(--bg) 80%,transparent);border-bottom:1px solid var(--bd);margin-top:14px}
+.tabs{display:flex;gap:6px;padding:10px 0;overflow-x:auto}
+.tabs button{border:0;background:transparent;color:var(--mut);padding:9px 16px;border-radius:99px;font:600 14px inherit;cursor:pointer;white-space:nowrap}
+.tabs button.on{background:var(--pri);color:#fff;box-shadow:var(--glow)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;padding:12px 0}
+.filters input,.filters select{padding:10px 12px;border:1px solid var(--bd);border-radius:12px;background:var(--card);color:var(--tx);font-size:14px;backdrop-filter:blur(8px)}
+.filters input{flex:1;min-width:200px}
 .chip{padding:6px 12px;border-radius:99px;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer;font-size:13px}
 .chip.on{background:var(--pri);color:#fff;border-color:var(--pri)}
-main{max-width:1200px;margin:auto;padding:0 16px 40px;display:grid;grid-template-columns:1fr 340px;gap:14px}
-@media(max-width:900px){main{grid-template-columns:1fr}}
-.box{background:var(--card);border:1px solid var(--bd);border-radius:16px;overflow:hidden}
-svg{width:100%;height:560px;display:block;touch-action:none}
-.leg{display:flex;gap:12px;flex-wrap:wrap;padding:10px 14px;font-size:12px;color:var(--mut);border-top:1px solid var(--bd)}
-.leg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
-#side{padding:16px;max-height:620px;overflow:auto}#side h2{margin:0 0 6px;font-size:18px}
-.tag{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600;color:#fff;margin:2px 4px 2px 0}
+.chip.rst{border-style:dashed;color:var(--mut)}
+main{display:grid;grid-template-columns:1fr 380px;gap:16px;padding-bottom:50px}
+@media(max-width:960px){main{grid-template-columns:1fr}}
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:20px;box-shadow:var(--glow);backdrop-filter:blur(10px);overflow:hidden}
+.tab{display:none}.tab.on{display:block}
+svg#g{width:100%;height:auto;aspect-ratio:1000/640;display:block;cursor:grab;touch-action:none}
+svg#g:active{cursor:grabbing}
+.leg{display:flex;gap:14px;flex-wrap:wrap;padding:10px 16px;border-top:1px solid var(--bd);font-size:12px;color:var(--mut)}
+.leg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+#side{padding:20px;max-height:calc(100vh - 140px);overflow:auto;position:sticky;top:76px;align-self:start}
+@media(max-width:960px){#side{position:static;max-height:none}}
+#side h2{margin:0 0 4px;font-size:20px;line-height:1.2}
+.yr{color:var(--pri);font-weight:800}
+.tag{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:700;color:#fff;margin:2px 4px 2px 0}
 .def{background:var(--def)}.anu{background:var(--anu)}.inv{background:var(--inv)}.arq{background:var(--arq)}
-.li{padding:8px 0;border-bottom:1px solid var(--bd);font-size:14px}.li:last-child{border:0}
-h3{margin:22px 0 10px}.tl{max-width:1200px;margin:0 auto;padding:0 16px 60px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
-.cd{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;cursor:pointer}.cd:hover{border-color:var(--pri)}
-.cd b{display:block;margin:4px 0}.yr{color:var(--pri);font-weight:700}
-a{color:var(--pri)}text{font-size:11px;fill:var(--tx);pointer-events:none}
+.mec{display:inline-block;padding:2px 9px;border-radius:8px;font-size:12px;border:1px solid var(--bd);color:var(--mut);margin:2px 4px 2px 0}
+.blk{margin-top:14px;padding:12px 14px;border-radius:14px;background:color-mix(in srgb,var(--pri) 7%,transparent);border:1px solid var(--bd)}
+.blk b.t{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--pri);margin-bottom:4px}
+.lt{border-left:3px solid var(--pri);padding:2px 0 2px 10px;margin:6px 0;font-size:14px}
+.li{padding:9px 0;border-bottom:1px solid var(--bd);font-size:14px}.li:last-child{border:0}
+text.l{font-size:11px;fill:var(--tx);paint-order:stroke;stroke:var(--bg);stroke-width:3px;pointer-events:none;font-weight:600}
+.nd{transition:opacity .2s}.dim{opacity:.1}
+.map{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;padding:20px;max-width:680px;margin:auto}
+.st{aspect-ratio:1;border-radius:14px;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer;font:700 14px inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:.2s;position:relative}
+.st small{font-weight:500;font-size:11px;color:var(--mut)}
+.st:hover,.st.sel{transform:translateY(-3px);border-color:var(--pri);box-shadow:var(--glow)}
+.st.v{visibility:hidden}
+.tl{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px;padding:16px}
+.cd{border:1px solid var(--bd);border-radius:16px;padding:14px;cursor:pointer;background:var(--card);transition:.2s}
+.cd:hover{border-color:var(--pri);transform:translateY(-2px);box-shadow:var(--glow)}
+.cd b{display:block;margin:4px 0}.cd span.d{color:var(--mut);font-size:13px}
+.an{padding:20px}.an h3{margin:26px 0 10px;font-size:18px}.an h3:first-child{margin-top:0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.kpi{border:1px solid var(--bd);border-radius:14px;padding:12px;text-align:center}.kpi b{display:block;font-size:28px;color:var(--pri)}.kpi span{font-size:12px;color:var(--mut)}
+.bar{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:13px}.bar .n{width:190px;flex:none}.bar .tr{flex:1;background:color-mix(in srgb,var(--mut) 15%,transparent);border-radius:99px;height:12px;overflow:hidden}.bar .f{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--pri),var(--pt));transition:width .6s}.bar .v{width:26px;text-align:right;font-weight:700}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.mk{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--bd);font-size:14px}.mk b{color:var(--pri);flex:none;width:44px}
+a{color:var(--pri)}footer{text-align:center;color:var(--mut);font-size:12px;padding:20px}
 </style>
 </head>
 <body>
+<div class="wrap">
 <header>
-  <h1>Mapa da <span>Corrupção</span> no Brasil · 1988–2026</h1>
-  <div class="aviso">Conteúdo informativo baseado em fatos públicos e no <b>status processual</b> de cada caso. Toda pessoa é presumida inocente até decisão definitiva, e condenações anuladas não são condenações vigentes. Dados até out/2026; casos recentes estão em andamento. Confira as fontes e envie correções via <i>Issues</i> no GitHub.</div>
+  <h1>Atlas da <span>Corrupção</span> no Brasil</h1>
+  <p class="sub">Casos, pessoas, partidos e instituições desde a redemocratização (1988–2026): conexões, status judicial e análise.</p>
+  <div class="aviso">Conteúdo informativo baseado em fatos públicos e no <b>status processual</b> de cada caso. Toda pessoa é presumida inocente até decisão definitiva, e condenações anuladas não são condenações vigentes. Os casos recentes estão em andamento. Confira as fontes e envie correções pelas <i>Issues</i> do repositório.</div>
 </header>
-<div class="bar">
-  <input id="q" placeholder="Buscar pessoa, partido ou caso…">
+</div>
+<div class="nav"><div class="wrap"><div class="tabs" id="tabs">
+  <button data-t="rede" class="on">🕸️ Rede</button><button data-t="mapa">🗺️ Estados</button><button data-t="tl">🕰️ Linha do tempo</button><button data-t="an">📊 Análise</button>
+</div></div></div>
+<div class="wrap">
+<div class="filters">
+  <input id="q" placeholder="Buscar pessoa, partido, caso ou mecanismo…">
   <select id="per"><option value="0">Todos os períodos</option><option value="1">1988–1999</option><option value="2">2000–2013</option><option value="3">2014–2020</option><option value="4">2021–hoje</option></select>
   <select id="st"><option value="">Todos os status</option><option value="def">Condenação mantida</option><option value="anu">Condenação anulada</option><option value="inv">Em apuração</option><option value="arq">Arquivado / sem condenação</option></select>
+  <select id="mc"><option value="">Todos os mecanismos</option></select>
 </div>
-<div class="bar" id="chips"></div>
+<div class="filters" id="chips" style="padding-top:0"></div>
 <main>
-  <div class="box"><svg id="g"></svg>
-    <div class="leg"><span><i style="background:var(--pri)"></i>Caso</span><span><i style="background:#16a34a"></i>Pessoa</span><span><i style="background:#9333ea"></i>Partido</span><span>Arraste os nós · clique para detalhes</span></div></div>
-  <div class="box" id="side"><h2>Como usar</h2><p>Clique em um caso, pessoa ou partido na rede para ver detalhes, status judicial e fontes. Use os filtros para explorar períodos e partidos.</p></div>
+  <section>
+    <div class="panel tab on" id="t-rede"><svg id="g" viewBox="0 0 1000 640"></svg>
+      <div class="leg"><span><i style="background:var(--def)"></i>Caso (cor = status)</span><span><i style="background:var(--g)"></i>Pessoa</span><span><i style="background:var(--pt)"></i>Partido</span><span>Roda do mouse: zoom · Arraste o fundo: mover · Clique: detalhes</span></div></div>
+    <div class="panel tab" id="t-mapa"><div class="map" id="map"></div><div class="leg">Intensidade = número de casos que tocam o estado (nos filtros atuais). Clique para ver os casos.</div></div>
+    <div class="panel tab" id="t-tl"><div class="tl" id="tl"></div></div>
+    <div class="panel tab" id="t-an"><div class="an" id="an"></div></div>
+  </section>
+  <aside class="panel" id="side"><h2>Como usar</h2><p style="color:var(--mut)">Clique em um caso, pessoa ou partido para ver status judicial, mecanismo, análise e as leituras concorrentes. Use os filtros para explorar períodos, partidos e tipos de esquema.</p></aside>
 </main>
-<h3 style="max-width:1200px;margin:0 auto 10px;padding:0 16px">Linha do tempo</h3>
-<div class="tl" id="tl"></div>
+</div>
+<footer>Atlas da Corrupção no Brasil · dados curados, não exaustivos · contribua via Pull Request</footer>
 
 <script>
 const ST={def:"Condenação mantida",anu:"Condenação anulada",inv:"Em apuração",arq:"Arquivado / sem condenação"};
 const PART={PT:"PT",MDB:"MDB (ex-PMDB)",PSDB:"PSDB",PL:"PL (ex-PR)",PP:"PP",PTB:"PTB",DEM:"DEM / PFL / União",PRN:"PRN",REP:"Republicanos"};
+const MEC={fin:"Financiamento eleitoral / caixa 2",orc:"Emendas e Orçamento",est:"Contratos de estatais e obras",apo:"Compra de apoio político",fra:"Fraude financeira / previdenciária",gab:"Desvio em gabinete"};
 const PEOPLE={
- collor:{n:"Fernando Collor",p:"PRN",d:"Presidente (1990–92). Hoje fora do cargo."},
- pcfarias:{n:"Paulo César Farias",p:"PRN",d:"Tesoureiro de campanha de Collor; assassinado em 1996."},
+ collor:{n:"Fernando Collor",p:"PRN",d:"Presidente (1990–92); depois senador."},
+ pcfarias:{n:"Paulo César Farias",p:"PRN",d:"Tesoureiro de campanha de Collor; morto em 1996."},
  maluf:{n:"Paulo Maluf",p:"PP",d:"Ex-prefeito e ex-governador de São Paulo."},
  dirceu:{n:"José Dirceu",p:"PT",d:"Ex-ministro-chefe da Casa Civil."},
  genoino:{n:"José Genoino",p:"PT",d:"Ex-presidente do PT."},
  delubio:{n:"Delúbio Soares",p:"PT",d:"Ex-tesoureiro do PT."},
- valerio:{n:"Marcos Valério",p:"",d:"Publicitário, operador financeiro dos esquemas de Minas e do mensalão."},
+ valerio:{n:"Marcos Valério",p:"",d:"Publicitário e operador financeiro dos esquemas de Minas e do mensalão."},
  jefferson:{n:"Roberto Jefferson",p:"PTB",d:"Ex-deputado; denunciou o mensalão e foi condenado no mesmo processo."},
  valdemar:{n:"Valdemar Costa Neto",p:"PL",d:"Presidente nacional do PL."},
  azeredo:{n:"Eduardo Azeredo",p:"PSDB",d:"Ex-governador de Minas Gerais."},
@@ -78,149 +126,282 @@ const PEOPLE={
  aecio:{n:"Aécio Neves",p:"PSDB",d:"Ex-senador e ex-governador de Minas."},
  temer:{n:"Michel Temer",p:"MDB",d:"Ex-presidente da República."},
  lira:{n:"Arthur Lira",p:"PP",d:"Ex-presidente da Câmara."},
- camilo:{n:"Antônio Carlos Camilo Antunes (“Careca do INSS”)",p:"",d:"Apontado pelas investigações como figura do esquema de descontos."},
+ camilo:{n:"Antônio Carlos Camilo Antunes (“Careca do INSS”)",p:"",d:"Investigado como figura do esquema de descontos."},
  vorcaro:{n:"Daniel Vorcaro",p:"",d:"Dono do Banco Master."},
  flavio:{n:"Flávio Bolsonaro",p:"PL",d:"Senador."}
 };
 const R=(t,tx)=>({t,tx});
 const CASES=[
- {id:"collor",n:"Caso Collor / PC Farias",y:1992,s:"arq",par:["PRN"],
-  d:"Esquema de arrecadação paralela e tráfico de influência ligado ao tesoureiro PC Farias levou ao impeachment de Collor em 1992.",
-  st:"Impeachment em 1992; absolvido pelo STF na ação penal (1994). Em 2023, foi condenado pelo STF em outro caso (veja Lava Jato).",
-  pp:{collor:R("arq","Impeachment; absolvido na ação penal de 1994"),pcfarias:R("arq","Assassinado em 1996")}},
- {id:"anoes",n:"Anões do Orçamento",y:1993,s:"def",par:["MDB","DEM"],
-  d:"Parlamentares manipulavam emendas do Orçamento da União para favorecer empreiteiras e entidades. A CPI revelou o esquema.",
-  st:"10 deputados perderam o mandato: 4 renunciaram e 6 foram cassados. Envolvidos de vários partidos.",pp:{}},
- {id:"reeleicao",n:"Compra de votos da reeleição",y:1997,s:"arq",par:["PSDB","DEM"],
-  d:"Gravações publicadas pela imprensa sugeriram pagamento a deputados do Acre pelo voto na emenda da reeleição.",
-  st:"Dois deputados renunciaram; não houve condenação de integrantes do governo.",pp:{}},
- {id:"azeredo",n:"Mensalão tucano (Minas Gerais)",y:1998,s:"def",par:["PSDB"],
-  d:"Desvio de recursos de estatais mineiras e agências de Marcos Valério para a campanha de 1998 em Minas.",
-  st:"Azeredo foi condenado em segunda instância pelo TJ-MG.",
-  pp:{azeredo:R("def","Condenado pelo TJ-MG"),valerio:R("def","Condenado por esquemas ligados a Valério")}},
- {id:"mensalao",n:"Mensalão (AP 470)",y:2005,s:"def",par:["PT","PTB","PL","PP"],
-  d:"Pagamentos periódicos a parlamentares da base aliada do governo Lula em troca de apoio no Congresso, operados por Marcos Valério.",
-  st:"STF condenou 25 réus em 2012; as condenações da AP 470 foram mantidas.",
-  pp:{dirceu:R("def","Condenado na AP 470"),genoino:R("def","Condenado na AP 470"),delubio:R("def","Condenado na AP 470"),valerio:R("def","Condenado"),jefferson:R("def","Condenado e delator"),valdemar:R("def","Condenado na AP 470")}},
- {id:"sangue",n:"Sanguessugas (máfia das ambulâncias)",y:2006,s:"inv",par:["MDB","PT","PP","PL","PSDB","DEM"],
-  d:"Esquema de emendas parlamentares para compra superfaturada de ambulâncias.",
-  st:"Dezenas de parlamentares de vários partidos investigados; desfechos variam por processo.",
-  pp:{vedoin:R("def","Empresário, figura central do esquema")}},
- {id:"pandora",n:"Caixa de Pandora (DF)",y:2009,s:"inv",par:["DEM"],
-  d:"Vídeos mostraram pagamento de propina a integrantes do governo do Distrito Federal.",
-  st:"Arruda foi preso preventivamente em 2010 e perdeu o cargo; processos tiveram desfechos distintos.",
-  pp:{arruda:R("inv","Preso preventivamente em 2010")}},
- {id:"maluf",n:"Contas no exterior (Maluf)",y:2017,s:"def",par:["PP"],
-  d:"Lavagem de dinheiro de desvios em obras públicas da cidade de São Paulo.",
-  st:"Condenado pelo STF em 2017 por lavagem de dinheiro.",pp:{maluf:R("def","Condenado pelo STF")}},
- {id:"lavajato",n:"Lava Jato / Petrolão",y:2014,s:"anu",par:["PT","MDB","PP","PTB"],
-  d:"Pagamento de propinas por empreiteiras em contratos da Petrobras, com repasse a políticos e partidos.",
-  st:"Cerca de 174 condenações, 120 delações e R$ 4,3 bi devolvidos (balanços citados pela imprensa). O STF anulou muitas condenações por incompetência da 13ª Vara de Curitiba e por suspeição de Moro. Críticos falam em desmonte do combate à corrupção; defensores, em correção de ilegalidades.",
-  pp:{lula:R("anu","Condenações anuladas pelo STF (2021)"),dirceu:R("anu","Condenação da Lava Jato derrubada pelo STF"),palocci:R("anu","Condenações anuladas (a delação segue válida)"),vaccari:R("anu","Condenações anuladas"),cunha:R("anu","Condenação anulada por incompetência"),odebrecht:R("anu","Decisões anuladas pelo STF"),costa:R("def","Delator"),youssef:R("def","Delator"),collor:R("def","Condenado pelo STF em 2023 (8 anos e 10 meses)")},
-  src:[["Isto É Dinheiro: anulações","https://www.istoedinheiro.com.br/tribunais-revogam-277-anos-de-penas-em-processos-de-casos-de-corrupcao/"]]},
- {id:"cabral",n:"Esquema Cabral (RJ)",y:2016,s:"inv",par:["MDB"],
-  d:"Propinas em obras e contratos do governo do Rio de Janeiro, no âmbito da Lava Jato fluminense.",
-  st:"Várias condenações foram anuladas; outras seguem ativas. Consulte processo a processo.",
-  pp:{cabral:R("inv","Parte das condenações anulada; outras ativas")}},
- {id:"jbs",n:"Delação da JBS",y:2017,s:"inv",par:["MDB","PSDB"],
-  d:"Delação de Joesley Batista citou pagamentos a políticos.",
-  st:"Denúncias contra Temer foram barradas pela Câmara (2017). Aécio tornou-se réu no STF (2019); consulte o desfecho nos autos.",
-  pp:{temer:R("arq","Denúncias barradas pela Câmara"),aecio:R("inv","Tornou-se réu em 2019")}},
- {id:"rachadinha",n:"Rachadinha (gabinete, RJ)",y:2018,s:"arq",par:["PL"],
-  d:"Investigação sobre devolução de salários de assessores no gabinete estadual de Flávio Bolsonaro.",
-  st:"O STJ anulou decisões que embasavam a investigação (2021).",
-  pp:{flavio:R("arq","Provas anuladas pelo STJ")}},
- {id:"emendas",n:"Orçamento secreto / emendas",y:2020,s:"inv",par:["PP","PL","REP"],
-  d:"Emendas de relator e outras emendas distribuídas sem transparência. O STF (min. Dino) determinou investigações da PF.",
-  st:"Em apuração; a PGR pediu condenação de deputados do PL em uma ação penal. Segundo a imprensa, bens de Cunha e Valdemar foram bloqueados em 2026.",
-  pp:{lira:R("inv","Citado em decisões do STF"),valdemar:R("inv","PF aponta influência sobre emendas; ele nega irregularidade"),cunha:R("inv","Bens bloqueados, segundo a imprensa")},
-  src:[["Correio da Manhã","https://www.correiodamanha.com.br/politica/2026/07/301785-stf-mira-possivel-novo-orcamento-secreto.html"]]},
- {id:"inss",n:"Fraude dos descontos do INSS",y:2025,s:"inv",par:["PT","PL"],
-  d:"Descontos associativos não autorizados em aposentadorias. Foi deflagrada em 2025 pela PF e pela CGU, com CPMI no Congresso.",
-  st:"Em apuração. R$ 2,9 bi devolvidos às vítimas (jan/2026). Relatórios políticos divergem: situação culpa o governo Bolsonaro; oposição mira o governo atual.",
-  pp:{camilo:R("inv","Investigado")},
-  src:[["Congresso em Foco: CPMI","https://www.congressoemfoco.com.br/noticia/117519/cpmi-do-inss-completa-180-dias-em-meio-a-polemicas-e-investigacao"]]},
- {id:"master",n:"Banco Master",y:2025,s:"inv",par:[],
-  d:"Fraude financeira investigada pela PF (Operação Compliance Zero). Liquidado em 18/11/2025, com ligações com o consignado do INSS.",
-  st:"Em apuração no STF e na PF. A defesa de Vorcaro afirma que o banco seguiu as normas.",
-  pp:{vorcaro:R("inv","Investigado; defesa nega irregularidades")}}
+{id:"collor",n:"Caso Collor / PC Farias",y:1992,s:"arq",uf:["DF","AL"],par:["PRN"],mec:["fin"],
+ d:"Esquema de arrecadação paralela e tráfico de influência ligado ao tesoureiro PC Farias levou ao impeachment de Collor em 1992.",
+ st:"Collor renunciou antes do fim do julgamento no Senado, que mesmo assim o tornou inelegível por 8 anos. O STF o absolveu na ação penal (1994). Em 2023 foi condenado pelo STF em outro caso (veja Lava Jato).",
+ efeito:"Primeiro impeachment da democracia pós-1988; consolidou a CPI e a imprensa investigativa como mecanismos de controle.",
+ an:"Foi o primeiro grande teste da Constituição de 1988: Congresso, imprensa e sociedade funcionaram politicamente, mas o desfecho penal foi frágil. A absolvição de 1994 é o exemplo clássico da dificuldade de ligar dinheiro a um ato de ofício específico, um problema que reaparece em casos posteriores.",
+ lei:["Para quem defende o processo político: as instituições responderam e o presidente caiu.","Para críticos: a absolvição penal mostrou a distância entre escândalo político e prova judicial."],
+ pp:{collor:R("arq","Impeachment; absolvido na ação penal de 1994"),pcfarias:R("arq","Morto em 1996")}},
+{id:"anoes",n:"Anões do Orçamento",y:1993,s:"def",uf:["DF"],par:["MDB","DEM"],mec:["orc"],
+ d:"Parlamentares manipulavam emendas do Orçamento da União para favorecer empreiteiras e entidades ligadas a eles. A CPI revelou o esquema.",
+ st:"10 deputados perderam o mandato: 4 renunciaram e 6 foram cassados. Envolvidos de vários partidos.",
+ efeito:"Reformas no processo orçamentário do Congresso, segundo a literatura acadêmica.",
+ an:"Primeiro escândalo sistêmico do Legislativo pós-1988. Pesquisadores como Sérgio Praça descrevem um ciclo: escândalo, reforma e adaptação do esquema. O poder sobre emendas cria oportunidade de desvio, e o incentivo reaparece nas décadas seguintes.",
+ lei:["Defensores das reformas: a CPI reduziu a discricionariedade e puniu parlamentares.","Críticos: o poder sobre emendas só mudou de formato (Sanguessugas, orçamento secreto)."],pp:{}},
+{id:"reeleicao",n:"Compra de votos da reeleição",y:1997,s:"arq",uf:["AC","DF"],par:["PSDB","DEM"],mec:["apo"],
+ d:"Gravações divulgadas pela imprensa sugeriram pagamento a deputados do Acre pelo voto na emenda da reeleição (EC 16/1997).",
+ st:"Dois deputados renunciaram; não houve condenação de integrantes do governo.",
+ efeito:"A emenda foi aprovada e permitiu a reeleição de Fernando Henrique Cardoso em 1998.",
+ an:"Mostra que um escândalo sem condenação ainda produz efeitos políticos: a emenda passou e o governo seguiu. Ilustra a assimetria entre denúncia pública e apuração institucional.",
+ lei:["Críticos viram compra de votos para aprovar uma mudança constitucional.","Os envolvidos negaram e não houve condenação de membros do governo."],pp:{}},
+{id:"azeredo",n:"Mensalão tucano (Minas Gerais)",y:1998,s:"def",uf:["MG"],par:["PSDB"],mec:["fin","est"],
+ d:"Desvio de recursos de estatais mineiras e de agências de Marcos Valério para a campanha de 1998 em Minas.",
+ st:"Azeredo foi condenado em segunda instância pelo TJ-MG.",
+ efeito:"Contribuiu para o debate sobre caixa 2 e financiamento de campanha.",
+ an:"Antecede o mensalão petista e usa o mesmo operador. Os fatos são de 1998, mas a condenação de segunda instância veio quase duas décadas depois. O processo saiu do STF para a Justiça estadual quando o réu perdeu o foro, um bom exemplo de como mudanças de competência alongam o desfecho.",
+ lei:["Críticos veem diferença de ritmo entre os dois “mensalões”.","Do ponto de vista jurídico, boa parte da diferença vem de mudanças de foro e competência."],
+ pp:{azeredo:R("def","Condenado pelo TJ-MG"),valerio:R("def","Condenado em esquemas ligados a Valério")}},
+{id:"mensalao",n:"Mensalão (AP 470)",y:2005,s:"def",uf:["DF","SP","MG"],par:["PT","PTB","PL","PP"],mec:["apo","fin"],
+ d:"Pagamentos periódicos a parlamentares da base aliada do governo Lula em troca de apoio no Congresso, operados por Marcos Valério.",
+ st:"STF condenou 25 réus em 2012; as condenações da AP 470 foram mantidas.",
+ efeito:"Julgamento televisionado que consolidou a imagem do STF como arena anticorrupção e reforçou o debate sobre financiamento de campanha.",
+ an:"Primeiro julgamento penal de grande escala de políticos de alto escalão pelo STF. Revelou o “presidencialismo de coalizão” operando com dinheiro ilícito. Também mostrou o papel do caixa 2 eleitoral e inaugurou a ideia de que o foro privilegiado podia terminar em condenação.",
+ lei:["Acusação e STF: esquema sistêmico de compra de apoio parlamentar.","Réus e parte do PT: era caixa 2 eleitoral, não compra de votos (tese rejeitada pelo STF)."],
+ pp:{dirceu:R("def","Condenado na AP 470"),genoino:R("def","Condenado na AP 470"),delubio:R("def","Condenado na AP 470"),valerio:R("def","Condenado"),jefferson:R("def","Condenado e delator"),valdemar:R("def","Condenado na AP 470")}},
+{id:"sangue",n:"Sanguessugas (máfia das ambulâncias)",y:2006,s:"inv",uf:["MT","DF"],par:["MDB","PT","PP","PL","PSDB","DEM"],mec:["orc"],
+ d:"Empresas combinavam com parlamentares emendas para vender ambulâncias superfaturadas a municípios.",
+ st:"Dezenas de parlamentares de vários partidos investigados; desfechos variam por processo.",
+ efeito:"Mudanças nas regras de convênios e transferências com a União.",
+ an:"Mostrou que a corrupção atingia também a ponta do orçamento, o repasse a municípios. A literatura destaca que reformas posteriores alteraram o padrão de desvio, mas não o eliminaram.",
+ lei:["Foi um escândalo suprapartidário, com parlamentares de vários partidos.","As poucas punições individuais dificultam avaliar o efeito dissuasório."],
+ pp:{vedoin:R("def","Empresário, figura central do esquema")}},
+{id:"pandora",n:"Caixa de Pandora (DF)",y:2009,s:"inv",uf:["DF"],par:["DEM"],mec:["est","fin"],
+ d:"Vídeos gravados por um integrante do governo do Distrito Federal mostraram pagamento de propina a políticos e aliados.",
+ st:"Arruda foi preso preventivamente em 2010 e perdeu o cargo; os processos tiveram desfechos distintos.",
+ efeito:"Cassação de mandato e crise política no DF.",
+ an:"A prova veio de gravações de um delator dentro do governo, antes da lei das organizações criminosas (2013). Ilustra o uso de gravações e delações e o desafio de transformá-las em condenação definitiva.",
+ lei:["Acusação: evidência direta em vídeo.","Defesas questionaram contexto e validade das gravações."],
+ pp:{arruda:R("inv","Preso preventivamente em 2010")}},
+{id:"maluf",n:"Contas no exterior (Maluf)",y:2017,s:"def",uf:["SP"],par:["PP"],mec:["est"],
+ d:"Lavagem de dinheiro ligada a desvios em obras públicas na cidade de São Paulo.",
+ st:"Condenado pelo STF em 2017 por lavagem de dinheiro.",
+ efeito:"Caso de referência em cooperação internacional para rastrear contas.",
+ an:"Exemplo da distância entre o fato e a punição: as acusações datam dos anos 1990 e a condenação do STF saiu em 2017. Depois, a pena foi cumprida em prisão domiciliar por razões de saúde.",
+ lei:["Mostra que a Justiça pode alcançar figuras antigas e poderosas.","Também mostra a demora típica dos processos."],
+ pp:{maluf:R("def","Condenado pelo STF")}},
+{id:"lavajato",n:"Lava Jato / Petrolão",y:2014,s:"anu",uf:["PR","RJ","SP","DF"],par:["PT","MDB","PP","PTB"],mec:["est","fin"],
+ d:"Pagamento de propinas por empreiteiras em contratos da Petrobras, com repasse a políticos e partidos.",
+ val:"≈174 condenações, 120 delações, R$ 4,3 bi devolvidos (balanços citados pela imprensa)",
+ st:"O STF anulou muitas condenações por incompetência da 13ª Vara de Curitiba e por suspeição do juiz Sergio Moro no caso Lula (2021). Algumas condenações seguem válidas.",
+ efeito:"Impulsionou delações e acordos de leniência, programas de compliance nas empresas e o debate sobre financiamento de campanha (o STF vetou doações empresariais em 2015).",
+ an:"Maior operação anticorrupção do país: combinou delações, leniências, cooperação internacional e prisões preventivas, atingindo empreiteiras e políticos de vários partidos. O saldo é disputado. De um lado, houve devolução de recursos e mudança de práticas empresariais. De outro, a instabilidade jurídica reduziu punições definitivas.",
+ lei:["Crítica à anulação: impunidade e desmonte do combate à corrupção.","Crítica à operação: abusos processuais, parcialidade e uso político, reconhecidos em parte por decisões do STF."],
+ pp:{lula:R("anu","Condenações anuladas pelo STF (2021)"),dirceu:R("anu","Condenação da Lava Jato derrubada pelo STF"),palocci:R("anu","Condenações anuladas (a delação segue válida)"),vaccari:R("anu","Condenações anuladas"),cunha:R("anu","Condenação anulada por incompetência"),odebrecht:R("anu","Decisões anuladas pelo STF"),costa:R("def","Delator"),youssef:R("def","Delator"),collor:R("def","Condenado pelo STF em 2023 (8 anos e 10 meses)")},
+ src:[["Isto É Dinheiro: anulações","https://www.istoedinheiro.com.br/tribunais-revogam-277-anos-de-penas-em-processos-de-casos-de-corrupcao/"]]},
+{id:"cabral",n:"Esquema Cabral (RJ)",y:2016,s:"inv",uf:["RJ"],par:["MDB"],mec:["est"],
+ d:"Propinas em obras e contratos do governo do Rio de Janeiro, investigadas no braço fluminense da Lava Jato.",
+ st:"Cabral acumulou dezenas de condenações; várias foram anuladas, outras seguem ativas. Consulte processo a processo.",
+ efeito:"Prisão de um ex-governador por anos, algo raro na história recente do país.",
+ an:"Caso de forte prova documental e colaboração de operadores. É também um exemplo da fragmentação processual: dezenas de ações, algumas anuladas por incompetência, o que torna o “saldo” penal difícil de resumir.",
+ lei:["Acusação: esquema sistêmico em obras e contratos.","Defesa: nulidades processuais e excesso de prisão preventiva."],
+ pp:{cabral:R("inv","Parte das condenações anulada; outras ativas")}},
+{id:"jbs",n:"Delação da JBS",y:2017,s:"inv",uf:["DF","SP","MG"],par:["MDB","PSDB"],mec:["fin","apo"],
+ d:"Gravação e delação de empresários da JBS citaram pagamentos a políticos de vários partidos.",
+ st:"Denúncias contra Temer foram barradas pela Câmara (2017). Aécio tornou-se réu no STF (2019); consulte o desfecho nos autos.",
+ efeito:"Mostrou o filtro político para processar presidentes: é preciso autorização de 2/3 da Câmara.",
+ an:"O mesmo ano atingiu um presidente e um senador. A rejeição das denúncias contra Temer expôs como o desenho constitucional entrega à Câmara o filtro político sobre o processo.",
+ lei:["Defensores de Temer: provas frágeis e uso questionável da delação.","Críticos: o filtro político impediu o julgamento."],
+ pp:{temer:R("arq","Denúncias barradas pela Câmara"),aecio:R("inv","Tornou-se réu em 2019")}},
+{id:"rachadinha",n:"Rachadinha (gabinete, RJ)",y:2018,s:"arq",uf:["RJ"],par:["PL"],mec:["gab"],
+ d:"Investigação sobre devolução de parte dos salários de assessores em gabinete na Assembleia do Rio de Janeiro.",
+ st:"O STJ anulou decisões que embasavam a investigação (2021).",
+ efeito:"Debate sobre foro privilegiado e uso de dados financeiros em investigações.",
+ an:"Exemplo de disputa sobre competência e validade de provas: ao anular decisões de primeira instância, o tribunal superior esvaziou a base do caso.",
+ lei:["Acusação: esquema de devolução de salários.","Defesa: perseguição política e ilegalidade das provas; a nulidade foi reconhecida por tribunal superior."],
+ pp:{flavio:R("arq","Provas anuladas pelo STJ")}},
+{id:"emendas",n:"Orçamento secreto e emendas",y:2020,s:"inv",uf:["DF","AL","SP"],par:["PP","PL","REP"],mec:["orc"],
+ d:"Emendas de relator (RP9) e outras formas de emenda distribuídas sem transparência. O STF (min. Dino) mandou a PF investigar.",
+ st:"Em apuração. A PGR pediu a condenação de deputados do PL em uma ação penal. Segundo a imprensa, em 2026 foram bloqueados bens de Cunha e Valdemar.",
+ efeito:"O STF declarou inconstitucionais as emendas de relator (dez/2022). Antes disso, a EC 86/2015 tornou impositivas as emendas individuais.",
+ an:"Reproduz o ciclo dos Anões do Orçamento: após o fim do orçamento secreto, novas formas (emendas Pix, de liderança, influência de pessoas sem mandato) entram no radar do STF. O debate de fundo é de desenho institucional: o poder do Congresso sobre o Orçamento versus a transparência e a rastreabilidade.",
+ lei:["STF e órgãos de controle: a opacidade favorece desvios.","Parlamentares: emendas são prerrogativa do Legislativo e a atuação do STF seria excessiva."],
+ pp:{lira:R("inv","Citado em decisões do STF"),valdemar:R("inv","PF aponta influência sobre emendas; ele nega irregularidade"),cunha:R("inv","Bens bloqueados, segundo a imprensa")},
+ src:[["Correio da Manhã: STF mira novo orçamento secreto","https://www.correiodamanha.com.br/politica/2026/07/301785-stf-mira-possivel-novo-orcamento-secreto.html"]]},
+{id:"inss",n:"Fraude dos descontos do INSS",y:2025,s:"inv",uf:["DF"],par:["PT","PL"],mec:["fra"],
+ d:"Descontos associativos não autorizados em aposentadorias, revelados em 2025 pela PF e pela CGU, com CPMI no Congresso.",
+ val:"R$ 2,9 bi devolvidos às vítimas; 6,2 mi de contestações (jan/2026)",
+ st:"Em apuração. Relatórios políticos divergem sobre a responsabilidade.",
+ efeito:"Devolução de valores, revisão dos acordos com entidades associativas e uma CPMI com foco também no Banco Master.",
+ an:"O esquema atingiu diretamente aposentados e atravessou governos diferentes, e por isso a disputa política é sobre responsabilidade. A literatura de controle sugere olhar para o desenho: regras de desconto associativo que cresceram por anos sem fiscalização eficaz.",
+ lei:["Relatório governista: a fraude cresceu no governo Bolsonaro e foi desmontada na gestão Lula.","Oposição: falha de fiscalização do governo atual."],
+ pp:{camilo:R("inv","Investigado")},
+ src:[["Congresso em Foco: CPMI do INSS","https://www.congressoemfoco.com.br/noticia/117519/cpmi-do-inss-completa-180-dias-em-meio-a-polemicas-e-investigacao"]]},
+{id:"master",n:"Banco Master",y:2025,s:"inv",uf:["SP","DF"],par:[],mec:["fra"],
+ d:"Fraude financeira investigada pela PF (Operação Compliance Zero). Banco liquidado em 18/11/2025, com ligações com o consignado do INSS.",
+ val:"R$ 92 mi em descontos atribuídos ao Master (CPMI)",
+ st:"Em apuração no STF e na PF. A defesa de Vorcaro afirma que o banco seguiu as normas.",
+ efeito:"Liquidação pelo Banco Central e debate sobre a atuação do regulador.",
+ an:"Caso que cruzou três arenas: regulador (liquidação do banco), previdência (consignado do INSS) e Judiciário (relatoria no STF). Ainda não há desfecho, e o escopo da CPMI é parte da disputa.",
+ lei:["Críticos questionam a atuação do regulador antes da liquidação.","A defesa do dono afirma que o banco seguiu as normas do INSS."],
+ pp:{vorcaro:R("inv","Investigado; a defesa nega irregularidades")}}
 ];
-const links=[["inss","master"],["lavajato","cabral"]];
-const $=s=>document.querySelector(s);
+const LINKS=[["inss","master"],["lavajato","cabral"],["mensalao","azeredo"],["anoes","sangue"],["sangue","emendas"],["anoes","emendas"]];
+const MARCOS=[[1992,"Impeachment de Collor"],[1993,"CPI dos Anões do Orçamento"],[2000,"Lei de Responsabilidade Fiscal"],[2010,"Lei da Ficha Limpa"],[2011,"Lei de Acesso à Informação"],[2013,"Lei Anticorrupção (12.846) e Lei das Organizações Criminosas (12.850)"],[2015,"STF veta doações empresariais; EC 86 torna impositivas as emendas individuais"],[2016,"STF admite prisão após 2ª instância (revertido em 2019)"],[2021,"STF anula condenações de Lula na Lava Jato"],[2022,"STF derruba as emendas de relator (RP9)"]];
 const PER=[[0,9999],[1988,1999],[2000,2013],[2014,2020],[2021,9999]];
-let selParts=new Set(),nodes=[],edges=[];
-const svg=$("#g"),NS="http://www.w3.org/2000/svg";
-const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":">"}[c]));
+const TILES={RR:[2,0],AP:[4,0],AM:[1,1],PA:[3,1],MA:[5,1],CE:[6,1],RN:[7,1],AC:[0,2],RO:[1,2],MT:[2,2],TO:[4,2],PI:[5,2],PE:[6,2],PB:[7,2],MS:[2,3],GO:[3,3],DF:[4,3],BA:[5,3],AL:[6,3],SE:[7,3],SP:[3,4],MG:[4,4],ES:[5,4],PR:[3,5],RJ:[4,5],SC:[3,6],RS:[3,7]};
 
+const $=s=>document.querySelector(s),NS="http://www.w3.org/2000/svg";
+const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const tag=s=>`<span class="tag ${s}">${ST[s]}</span>`;
+let selParts=new Set(),nodes=[],edges=[],svg=$("#g"),vp,T={x:0,y:0,k:1},curUF=null;
+
+/* ---------- filtros ---------- */
 function filtered(){
-  const q=$("#q").value.toLowerCase(),[a,b]=PER[$("#per").value],st=$("#st").value;
+  const q=$("#q").value.toLowerCase(),[a,b]=PER[$("#per").value],st=$("#st").value,mc=$("#mc").value;
   return CASES.filter(c=>{
     if(c.y<a||c.y>b)return false;
-    const hit=Object.values(c.pp).some(r=>r.t===st);
-    if(st&&c.s!==st&&!hit)return false;
+    if(st&&c.s!==st&&!Object.values(c.pp).some(r=>r.t===st))return false;
+    if(mc&&!c.mec.includes(mc))return false;
     if(selParts.size&&!c.par.some(p=>selParts.has(p))&&!Object.keys(c.pp).some(k=>selParts.has(PEOPLE[k].p)))return false;
-    if(q){const hay=(c.n+c.d+c.par.map(p=>PART[p]).join(" ")+Object.keys(c.pp).map(k=>PEOPLE[k].n).join(" ")).toLowerCase();if(!hay.includes(q))return false}
+    if(q){const h=(c.n+c.d+c.par.map(p=>PART[p]).join(" ")+c.mec.map(m=>MEC[m]).join(" ")+Object.keys(c.pp).map(k=>PEOPLE[k].n).join(" ")).toLowerCase();if(!h.includes(q))return false}
     return true});
 }
+
+/* ---------- rede ---------- */
 function build(){
   const cs=filtered(),N=new Map(),E=[];
-  const add=(id,t,l)=>{if(!N.has(id))N.set(id,{id,t,l,x:0,y:0,vx:0,vy:0});return N.get(id)};
-  cs.forEach(c=>{add("c:"+c.id,"c",c.n);
+  const add=(id,t,l,ref)=>{if(!N.has(id))N.set(id,{id,t,l,ref,x:500,y:320,vx:0,vy:0});return N.get(id)};
+  cs.forEach(c=>{add("c:"+c.id,"c",c.n,c);
     c.par.forEach(p=>{add("g:"+p,"g",PART[p]);E.push(["c:"+c.id,"g:"+p])});
     Object.keys(c.pp).forEach(k=>{add("p:"+k,"p",PEOPLE[k].n.split(" (")[0]);E.push(["c:"+c.id,"p:"+k]);
-      const pt=PEOPLE[k].p;if(pt&&PART[pt]&&N.has("g:"+pt))E.push(["p:"+k,"g:"+pt])})});
-  links.forEach(([a,b])=>{if(N.has("c:"+a)&&N.has("c:"+b))E.push(["c:"+a,"c:"+b])});
+      const pt=PEOPLE[k].p;if(pt&&N.has("g:"+pt))E.push(["p:"+k,"g:"+pt])})});
+  LINKS.forEach(([a,b])=>{if(N.has("c:"+a)&&N.has("c:"+b))E.push(["c:"+a,"c:"+b])});
   nodes=[...N.values()];edges=E.map(([a,b])=>[N.get(a),N.get(b)]);
-  layout();draw();renderTL(cs);
+  nodes.forEach(n=>n.nb=new Set([n]));edges.forEach(([a,b])=>{a.nb.add(b);b.nb.add(a)});
+  nodes.forEach(n=>n.deg=n.nb.size-1);
+  layout();draw();renderMap(cs);renderTL(cs);renderAn(cs);
 }
 function layout(){
-  const W=svg.clientWidth||700,H=560;
-  nodes.forEach((n,i)=>{const a=i*2.4;n.x=W/2+Math.cos(a)*(40+i*5);n.y=H/2+Math.sin(a)*(40+i*4)});
-  for(let k=0;k<350;k++){const t=1-k/350;
-    for(const a of nodes)for(const b of nodes){if(a===b)continue;let dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy+.1,f=2600/d2*t;const d=Math.sqrt(d2);a.vx+=dx/d*f;a.vy+=dy/d*f}
-    for(const[a,b]of edges){const dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1,f=(d-95)*.02;a.vx+=dx/d*f;a.vy+=dy/d*f;b.vx-=dx/d*f;b.vy-=dy/d*f}
-    for(const n of nodes){n.vx+=(W/2-n.x)*.003;n.vy+=(H/2-n.y)*.003;n.x+=n.vx*.6;n.y+=n.vy*.6;n.vx*=.6;n.vy*=.6;n.x=Math.max(30,Math.min(W-30,n.x));n.y=Math.max(20,Math.min(H-20,n.y))}}
+  const W=1000,H=640;
+  nodes.forEach((n,i)=>{const a=i*2.4;n.x=W/2+Math.cos(a)*(30+i*7);n.y=H/2+Math.sin(a)*(30+i*5);n.vx=n.vy=0});
+  for(let k=0;k<420;k++){const t=1-k/420;
+    for(const a of nodes)for(const b of nodes){if(a===b)continue;const dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy+.1,d=Math.sqrt(d2),f=3800/d2*t;a.vx+=dx/d*f;a.vy+=dy/d*f}
+    for(const[a,b]of edges){const dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1,f=(d-110)*.025;a.vx+=dx/d*f;a.vy+=dy/d*f;b.vx-=dx/d*f;b.vy-=dy/d*f}
+    for(const n of nodes){n.vx+=(W/2-n.x)*.004;n.vy+=(H/2-n.y)*.004;n.x+=n.vx*.55;n.y+=n.vy*.55;n.vx*=.6;n.vy*=.6;n.x=Math.max(40,Math.min(W-40,n.x));n.y=Math.max(30,Math.min(H-30,n.y))}}
 }
-const COL={c:"var(--pri)",p:"#16a34a",g:"#9333ea"},RAD={c:11,p:7,g:9};
+const fillOf=n=>n.t==="c"?`var(--${n.ref.s})`:n.t==="p"?"var(--g)":"var(--pt)";
+const rOf=n=>(n.t==="c"?12:n.t==="g"?10:7)+Math.min(n.deg,8)*.9;
+function applyT(){vp.setAttribute("transform",`translate(${T.x},${T.y}) scale(${T.k})`)}
 function draw(){
-  svg.innerHTML="";
-  const gl=document.createElementNS(NS,"g");svg.appendChild(gl);
-  edges.forEach(e=>{const l=document.createElementNS(NS,"line");l.setAttribute("stroke","var(--bd)");l.setAttribute("stroke-width","1.4");e.l=l;gl.appendChild(l)});
-  nodes.forEach(n=>{const g=document.createElementNS(NS,"g");g.style.cursor="pointer";
-    const c=document.createElementNS(NS,"circle");c.setAttribute("r",RAD[n.t]);c.setAttribute("fill",COL[n.t]);
-    const t=document.createElementNS(NS,"text");t.setAttribute("dy",-RAD[n.t]-4);t.setAttribute("text-anchor","middle");t.textContent=n.l;
-    g.append(c,t);svg.appendChild(g);n.g=g;
+  svg.innerHTML='<rect id="bg" width="1000" height="640" fill="transparent"/>';
+  vp=document.createElementNS(NS,"g");svg.appendChild(vp);T={x:0,y:0,k:1};applyT();
+  const eg=document.createElementNS(NS,"g");vp.appendChild(eg);
+  edges.forEach(e=>{const p=document.createElementNS(NS,"path");p.setAttribute("fill","none");p.setAttribute("stroke","var(--mut)");p.setAttribute("stroke-opacity",".35");p.setAttribute("stroke-width","1.3");p.classList.add("nd");e.p=p;eg.appendChild(p)});
+  nodes.forEach(n=>{
+    const g=document.createElementNS(NS,"g");g.classList.add("nd");g.style.cursor="pointer";
+    const c=document.createElementNS(NS,"circle");c.setAttribute("r",rOf(n));c.setAttribute("fill",fillOf(n));c.setAttribute("stroke","var(--bg)");c.setAttribute("stroke-width","2.5");
+    const t=document.createElementNS(NS,"text");t.setAttribute("class","l");t.setAttribute("dy",-rOf(n)-5);t.setAttribute("text-anchor","middle");t.textContent=n.l;
+    g.append(c,t);vp.appendChild(g);n.g=g;
+    g.addEventListener("pointerenter",()=>hl(n));g.addEventListener("pointerleave",()=>hl(null));
     let drag=false,moved=false;
-    g.addEventListener("pointerdown",ev=>{drag=true;moved=false;g.setPointerCapture(ev.pointerId)});
-    g.addEventListener("pointermove",ev=>{if(!drag)return;moved=true;const r=svg.getBoundingClientRect();n.x=ev.clientX-r.left;n.y=ev.clientY-r.top;place()});
-    g.addEventListener("pointerup",()=>{drag=false;if(!moved)show(n)})});
+    g.addEventListener("pointerdown",ev=>{ev.stopPropagation();drag=true;moved=false;g.setPointerCapture(ev.pointerId)});
+    g.addEventListener("pointermove",ev=>{if(!drag)return;moved=true;const p=svg.createSVGPoint();p.x=ev.clientX;p.y=ev.clientY;const q=p.matrixTransform(vp.getScreenCTM().inverse());n.x=q.x;n.y=q.y;place()});
+    g.addEventListener("pointerup",()=>{drag=false;if(!moved)show(n)});
+  });
   place();
 }
-function place(){nodes.forEach(n=>n.g.setAttribute("transform",`translate(${n.x},${n.y})`));
-  edges.forEach(([a,b,],i)=>{const l=edges[i].l;l.setAttribute("x1",a.x);l.setAttribute("y1",a.y);l.setAttribute("x2",b.x);l.setAttribute("y2",b.y)})}
-const tag=s=>`<span class="tag ${s}">${ST[s]}</span>`;
+function place(){
+  nodes.forEach(n=>n.g.setAttribute("transform",`translate(${n.x},${n.y})`));
+  edges.forEach(([a,b],i)=>{const mx=(a.x+b.x)/2,my=(a.y+b.y)/2,dx=b.x-a.x,dy=b.y-a.y,o=((i%5)-2)*.08;
+    edges[i].p.setAttribute("d",`M${a.x},${a.y} Q${mx-dy*o},${my+dx*o} ${b.x},${b.y}`)});
+}
+function hl(n){
+  nodes.forEach(m=>m.g.classList.toggle("dim",!!n&&!n.nb.has(m)));
+  edges.forEach(([a,b,],i)=>edges[i].p.classList.toggle("dim",!!n&&!(n.nb.has(a)&&n.nb.has(b)&&(a===n||b===n))));
+}
+svg.addEventListener("wheel",ev=>{ev.preventDefault();const p=svg.createSVGPoint();p.x=ev.clientX;p.y=ev.clientY;const q=p.matrixTransform(svg.getScreenCTM().inverse());
+  const k2=Math.max(.5,Math.min(4,T.k*(ev.deltaY<0?1.12:.9)));T.x=q.x-(q.x-T.x)*k2/T.k;T.y=q.y-(q.y-T.y)*k2/T.k;T.k=k2;applyT()},{passive:false});
+let pan=null;
+svg.addEventListener("pointerdown",ev=>{if(ev.target.id!=="bg")return;pan={x:ev.clientX,y:ev.clientY};svg.setPointerCapture(ev.pointerId)});
+svg.addEventListener("pointermove",ev=>{if(!pan)return;const s=svg.getScreenCTM().a;T.x+=(ev.clientX-pan.x)/s;T.y+=(ev.clientY-pan.y)/s;pan={x:ev.clientX,y:ev.clientY};applyT()});
+svg.addEventListener("pointerup",()=>pan=null);
+
+/* ---------- painel lateral ---------- */
 function caseHTML(c){
-  return `<h2>${esc(c.n)}</h2><div class="yr">${c.y}</div>${tag(c.s)}<p>${esc(c.d)}</p><p><b>Situação:</b> ${esc(c.st)}</p>
-  ${c.par.length?`<p><b>Partidos ligados:</b> ${c.par.map(p=>PART[p]).join(", ")}</p>`:""}
-  ${Object.keys(c.pp).length?"<b>Pessoas e status:</b>"+Object.entries(c.pp).map(([k,r])=>`<div class="li"><b>${esc(PEOPLE[k].n)}</b> ${PEOPLE[k].p?`<span style="color:var(--mut)">(${PART[PEOPLE[k].p]})</span>`:""}<br>${tag(r.t)} ${esc(r.tx)}</div>`).join(""):""}
+  const pe=Object.entries(c.pp);
+  return `<h2>${esc(c.n)}</h2><div class="yr">${c.y}</div>${tag(c.s)}${c.mec.map(m=>`<span class="mec">${MEC[m]}</span>`).join("")}
+  <p>${esc(c.d)}</p>
+  <div class="blk"><b class="t">Situação judicial</b>${esc(c.st)}</div>
+  ${c.val?`<div class="blk"><b class="t">Escala e valores</b>${esc(c.val)}</div>`:""}
+  <div class="blk"><b class="t">Efeitos institucionais</b>${esc(c.efeito)}</div>
+  <div class="blk"><b class="t">Análise</b>${esc(c.an)}</div>
+  <div class="blk"><b class="t">Leituras concorrentes</b>${c.lei.map(l=>`<div class="lt">${esc(l)}</div>`).join("")}</div>
+  <p><b>Estados:</b> ${c.uf.join(", ")}${c.par.length?` · <b>Partidos ligados:</b> ${c.par.map(p=>PART[p]).join(", ")}`:""}</p>
+  ${pe.length?"<b>Pessoas e status</b>"+pe.map(([k,r])=>`<div class="li"><b>${esc(PEOPLE[k].n)}</b> ${PEOPLE[k].p?`<span style="color:var(--mut)">(${PART[PEOPLE[k].p]})</span>`:""}<br>${tag(r.t)} ${esc(r.tx)}</div>`).join(""):""}
   ${(c.src||[]).map(s=>`<p><a href="${s[1]}" target="_blank" rel="noopener">${esc(s[0])}</a></p>`).join("")}`;
 }
 function show(n){
-  const [k,id]=[n.id.slice(0,1),n.id.slice(2)],s=$("#side");
-  if(k==="c")s.innerHTML=caseHTML(CASES.find(c=>c.id===id));
-  if(k==="p"){const p=PEOPLE[id];s.innerHTML=`<h2>${esc(p.n)}</h2><p style="color:var(--mut)">${esc(p.d)} ${p.p?"Partido: "+PART[p.p]:""}</p>`+
+  const s=$("#side");
+  if(n.t==="c")s.innerHTML=caseHTML(n.ref);
+  if(n.t==="p"){const id=n.id.slice(2),p=PEOPLE[id];s.innerHTML=`<h2>${esc(p.n)}</h2><p style="color:var(--mut)">${esc(p.d)}${p.p?" Partido: "+PART[p.p]+".":""}</p>`+
     CASES.filter(c=>c.pp[id]).map(c=>`<div class="li"><b>${esc(c.n)}</b> (${c.y})<br>${tag(c.pp[id].t)} ${esc(c.pp[id].tx)}</div>`).join("")}
-  if(k==="g"){s.innerHTML=`<h2>${PART[id]}</h2><p style="color:var(--mut)">Casos em que o partido aparece (como alvo, governo ou filiação de envolvidos):</p>`+
-    CASES.filter(c=>c.par.includes(id)).map(c=>`<div class="li"><b>${esc(c.n)}</b> (${c.y}) ${tag(c.s)}</div>`).join("")}
+  if(n.t==="g"){const id=n.id.slice(2),cs=CASES.filter(c=>c.par.includes(id));s.innerHTML=`<h2>${PART[id]}</h2><p style="color:var(--mut)">Casos em que o partido aparece (como alvo, governo ou filiação de envolvidos). Aparecer aqui não equivale a culpa do partido.</p>`+
+    cs.map(c=>`<div class="li"><b>${esc(c.n)}</b> (${c.y}) ${tag(c.s)}</div>`).join("")}
 }
+function showCase(id){$("#side").innerHTML=caseHTML(CASES.find(c=>c.id===id));if(innerWidth<960)$("#side").scrollIntoView({behavior:"smooth"})}
+
+/* ---------- mapa de estados ---------- */
+function renderMap(cs){
+  const cnt={};cs.forEach(c=>c.uf.forEach(u=>cnt[u]=(cnt[u]||0)+1));
+  const max=Math.max(1,...Object.values(cnt));let h="";
+  for(let r=0;r<8;r++)for(let c=0;c<8;c++){
+    const u=Object.keys(TILES).find(k=>TILES[k][0]===c&&TILES[k][1]===r);
+    if(!u){h+='<div class="st v"></div>';continue}
+    const n=cnt[u]||0,a=n?.15+.7*n/max:0;
+    h+=`<button class="st ${curUF===u?"sel":""}" data-u="${u}" style="${n?`background:color-mix(in srgb,var(--pri) ${Math.round(a*100)}%,var(--card))`:""}">${u}<small>${n?n+(n>1?" casos":" caso"):"—"}</small></button>`}
+  $("#map").innerHTML=h;
+  document.querySelectorAll(".st[data-u]").forEach(b=>b.onclick=()=>{curUF=b.dataset.u;const l=cs.filter(c=>c.uf.includes(curUF));
+    $("#side").innerHTML=`<h2>${curUF}</h2><p style="color:var(--mut)">Casos que tocam o estado (como local dos fatos, do cargo ou do julgamento):</p>`+
+      (l.map(c=>`<div class="li" style="cursor:pointer" onclick="showCase('${c.id}')"><b>${esc(c.n)}</b> (${c.y}) ${tag(c.s)}</div>`).join("")||"<p>Nenhum caso nos filtros atuais.</p>");renderMap(cs)});
+}
+
+/* ---------- linha do tempo ---------- */
 function renderTL(cs){
-  $("#tl").innerHTML=[...cs].sort((a,b)=>a.y-b.y).map(c=>`<div class="cd" data-id="${c.id}"><span class="yr">${c.y}</span>${tag(c.s)}<b>${esc(c.n)}</b><span style="color:var(--mut);font-size:13px">${esc(c.d)}</span></div>`).join("")||"<p>Nada encontrado com esses filtros.</p>";
-  document.querySelectorAll(".cd").forEach(d=>d.onclick=()=>{$("#side").innerHTML=caseHTML(CASES.find(c=>c.id===d.dataset.id));scrollTo({top:0,behavior:"smooth"})});
+  $("#tl").innerHTML=[...cs].sort((a,b)=>a.y-b.y).map(c=>`<div class="cd" onclick="showCase('${c.id}')"><span class="yr">${c.y}</span> ${tag(c.s)}<b>${esc(c.n)}</b><span class="d">${esc(c.d)}</span></div>`).join("")||"<p style='padding:20px'>Nada encontrado com esses filtros.</p>";
 }
-$("#chips").innerHTML=Object.entries(PART).map(([k,v])=>`<button class="chip" data-p="${k}">${v}</button>`).join("");
-document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{const p=b.dataset.p;selParts.has(p)?selParts.delete(p):selParts.add(p);b.classList.toggle("on");build()});
-["q","per","st"].forEach(i=>$("#"+i).addEventListener("input",build));
-addEventListener("resize",()=>{layout();draw()});
+
+/* ---------- análise ---------- */
+function bars(obj,max){const m=max||Math.max(1,...Object.values(obj).map(x=>x.v));return Object.values(obj).map(o=>`<div class="bar"><span class="n">${o.l}</span><div class="tr"><div class="f" style="width:${o.v/m*100}%"></div></div><span class="v">${o.v}</span></div>`).join("")}
+function renderAn(cs){
+  const ppl=new Set();cs.forEach(c=>Object.keys(c.pp).forEach(k=>ppl.add(k)));
+  const S={},M={},D={},P={};
+  Object.keys(ST).forEach(k=>S[k]={l:ST[k],v:0});Object.keys(MEC).forEach(k=>M[k]={l:MEC[k],v:0});
+  Object.keys(PART).forEach(k=>P[k]={l:PART[k],v:0});[["1990s",1990],["2000s",2000],["2010s",2010],["2020s",2020]].forEach(([l,y])=>D[y]={l,v:0});
+  cs.forEach(c=>{S[c.s].v++;c.mec.forEach(m=>M[m].v++);c.par.forEach(p=>P[p].v++);D[Math.floor(c.y/10)*10].v++});
+  const pv=Object.fromEntries(Object.entries(P).filter(([k,o])=>o.v>0));
+  $("#an").innerHTML=`
+  <h3>Visão geral (nos filtros atuais)</h3>
+  <div class="kpis"><div class="kpi"><b>${cs.length}</b><span>casos</span></div><div class="kpi"><b>${ppl.size}</b><span>pessoas citadas</span></div><div class="kpi"><b>${S.def.v}</b><span>com condenação mantida</span></div><div class="kpi"><b>${S.anu.v}</b><span>com condenação anulada</span></div><div class="kpi"><b>${S.inv.v}</b><span>em apuração</span></div></div>
+  <div class="grid2"><div><h3>Por status do caso</h3>${bars(S)}</div><div><h3>Por mecanismo</h3>${bars(M)}</div></div>
+  <div class="grid2"><div><h3>Por década (ano-marco)</h3>${bars(D)}</div><div><h3>Partidos presentes nos casos</h3>${bars(pv)}<p style="font-size:12px;color:var(--mut)">Atenção: isto mede presença nesta seleção de casos, não um ranking de corrupção. Depende de quais casos foram incluídos, de quem estava no poder, de quem investigava e de quando.</p></div></div>
+  <h3>Padrões estruturais</h3>
+  <div class="blk"><b class="t">1. Dinheiro de campanha</b>Mensalão, mensalão tucano, Lava Jato e JBS se cruzam com o financiamento eleitoral. Eleições caras e doações empresariais criam incentivo ao caixa 2. O STF vetou doações de empresas em 2015, e a pesquisa ainda debate o efeito disso.</div>
+  <div class="blk"><b class="t">2. Orçamento e emendas: o ciclo escândalo–reforma–adaptação</b>Anões do Orçamento (1993), Sanguessugas (2006) e orçamento secreto (2020+) mostram que cada reforma fecha uma porta e a prática migra para outra. A pergunta central é institucional: quem controla a execução do Orçamento e com que rastreabilidade.</div>
+  <div class="blk"><b class="t">3. Presidencialismo de coalizão</b>Governos sem maioria própria precisam construir apoio. Reeleição, Mensalão e orçamento secreto mostram a compra de apoio por vias ilícitas ou opacas, em governos de diferentes campos.</div>
+  <div class="blk"><b class="t">4. Estatais e grandes contratos</b>Petrobras, estatais mineiras e obras estaduais aparecem como terreno de propina, pela combinação de contratos bilionários, indicação política de diretorias e fiscalização frágil.</div>
+  <div class="blk"><b class="t">5. A instabilidade jurídica</b>Competência, foro, suspeição e nulidades alteram desfechos (Lava Jato, rachadinha, mensalão tucano). Há duas leituras: para uns, essa instabilidade produz impunidade; para outros, protege o devido processo contra abusos. Ambas têm base em decisões reais.</div>
+  <div class="blk"><b class="t">6. Presença em todo o espectro</b>Nesta base, partidos de esquerda, centro e direita aparecem, em diferentes períodos e formas. Isso reflete mais o poder de cada um em cada época do que um traço de ideologia.</div>
+  <h3>Marcos institucionais</h3>${MARCOS.map(([y,t])=>`<div class="mk"><b>${y}</b><span>${t}</span></div>`).join("")}
+  <h3>Limites e vieses desta base</h3>
+  <div class="blk"><b class="t">Leia com cuidado</b>A seleção é curada e não exaustiva (faltam muitos casos estaduais e municipais). Valores e penas não são comparáveis entre casos. O status judicial muda e deve ser conferido nas fontes oficiais. Estar aqui não significa culpa e estar ausente não significa inocência.</div>`;
+}
+
+/* ---------- UI ---------- */
+$("#mc").innerHTML+=Object.entries(MEC).map(([k,v])=>`<option value="${k}">${v}</option>`).join("");
+$("#chips").innerHTML=Object.entries(PART).map(([k,v])=>`<button class="chip" data-p="${k}">${v}</button>`).join("")+'<button class="chip rst" id="rst">Limpar filtros</button>';
+document.querySelectorAll(".chip[data-p]").forEach(b=>b.onclick=()=>{const p=b.dataset.p;selParts.has(p)?selParts.delete(p):selParts.add(p);b.classList.toggle("on");build()});
+$("#rst").onclick=()=>{selParts.clear();document.querySelectorAll(".chip.on").forEach(b=>b.classList.remove("on"));$("#q").value="";$("#per").value="0";$("#st").value="";$("#mc").value="";build()};
+["q","per","st","mc"].forEach(i=>$("#"+i).addEventListener("input",build));
+document.querySelectorAll("#tabs button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("#tabs button").forEach(x=>x.classList.toggle("on",x===b));
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("on",t.id==="t-"+b.dataset.t))});
 build();
 </script>
 </body>
