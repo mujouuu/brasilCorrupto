@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa da Corrupção no Brasil · 1988–2026</title>
+<style>
+:root{--bg:#f5f6fa;--card:#fff;--tx:#151a2d;--mut:#667;--bd:#e1e5f0;--pri:#4f46e5;
+--def:#b91c1c;--anu:#b45309;--inv:#1d4ed8;--arq:#6b7280}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1020;--card:#161a2f;--tx:#eceffa;--mut:#9aa2c0;--bd:#262c4a;--pri:#8b85ff;
+--def:#f87171;--anu:#fbbf24;--inv:#60a5fa;--arq:#9ca3af}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:24px 16px 8px;max-width:1200px;margin:auto}h1{margin:0;font-size:26px}h1 span{color:var(--pri)}
+.aviso{background:var(--card);border:1px solid var(--bd);border-left:4px solid var(--anu);padding:10px 14px;border-radius:10px;margin-top:12px;font-size:13px;color:var(--mut)}
+.bar{max-width:1200px;margin:12px auto;padding:0 16px;display:flex;gap:8px;flex-wrap:wrap}
+.bar input,.bar select{padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--card);color:var(--tx);font-size:14px}
+.chip{padding:6px 12px;border-radius:99px;border:1px solid var(--bd);background:var(--card);color:var(--tx);cursor:pointer;font-size:13px}
+.chip.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+main{max-width:1200px;margin:auto;padding:0 16px 40px;display:grid;grid-template-columns:1fr 340px;gap:14px}
+@media(max-width:900px){main{grid-template-columns:1fr}}
+.box{background:var(--card);border:1px solid var(--bd);border-radius:16px;overflow:hidden}
+svg{width:100%;height:560px;display:block;touch-action:none}
+.leg{display:flex;gap:12px;flex-wrap:wrap;padding:10px 14px;font-size:12px;color:var(--mut);border-top:1px solid var(--bd)}
+.leg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px}
+#side{padding:16px;max-height:620px;overflow:auto}#side h2{margin:0 0 6px;font-size:18px}
+.tag{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;font-weight:600;color:#fff;margin:2px 4px 2px 0}
+.def{background:var(--def)}.anu{background:var(--anu)}.inv{background:var(--inv)}.arq{background:var(--arq)}
+.li{padding:8px 0;border-bottom:1px solid var(--bd);font-size:14px}.li:last-child{border:0}
+h3{margin:22px 0 10px}.tl{max-width:1200px;margin:0 auto;padding:0 16px 60px;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.cd{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;cursor:pointer}.cd:hover{border-color:var(--pri)}
+.cd b{display:block;margin:4px 0}.yr{color:var(--pri);font-weight:700}
+a{color:var(--pri)}text{font-size:11px;fill:var(--tx);pointer-events:none}
+</style>
+</head>
+<body>
+<header>
+  <h1>Mapa da <span>Corrupção</span> no Brasil · 1988–2026</h1>
+  <div class="aviso">Conteúdo informativo baseado em fatos públicos e no <b>status processual</b> de cada caso. Toda pessoa é presumida inocente até decisão definitiva, e condenações anuladas não são condenações vigentes. Dados até out/2026; casos recentes estão em andamento. Confira as fontes e envie correções via <i>Issues</i> no GitHub.</div>
+</header>
+<div class="bar">
+  <input id="q" placeholder="Buscar pessoa, partido ou caso…">
+  <select id="per"><option value="0">Todos os períodos</option><option value="1">1988–1999</option><option value="2">2000–2013</option><option value="3">2014–2020</option><option value="4">2021–hoje</option></select>
+  <select id="st"><option value="">Todos os status</option><option value="def">Condenação mantida</option><option value="anu">Condenação anulada</option><option value="inv">Em apuração</option><option value="arq">Arquivado / sem condenação</option></select>
+</div>
+<div class="bar" id="chips"></div>
+<main>
+  <div class="box"><svg id="g"></svg>
+    <div class="leg"><span><i style="background:var(--pri)"></i>Caso</span><span><i style="background:#16a34a"></i>Pessoa</span><span><i style="background:#9333ea"></i>Partido</span><span>Arraste os nós · clique para detalhes</span></div></div>
+  <div class="box" id="side"><h2>Como usar</h2><p>Clique em um caso, pessoa ou partido na rede para ver detalhes, status judicial e fontes. Use os filtros para explorar períodos e partidos.</p></div>
+</main>
+<h3 style="max-width:1200px;margin:0 auto 10px;padding:0 16px">Linha do tempo</h3>
+<div class="tl" id="tl"></div>
+
+<script>
+const ST={def:"Condenação mantida",anu:"Condenação anulada",inv:"Em apuração",arq:"Arquivado / sem condenação"};
+const PART={PT:"PT",MDB:"MDB (ex-PMDB)",PSDB:"PSDB",PL:"PL (ex-PR)",PP:"PP",PTB:"PTB",DEM:"DEM / PFL / União",PRN:"PRN",REP:"Republicanos"};
+const PEOPLE={
+ collor:{n:"Fernando Collor",p:"PRN",d:"Presidente (1990–92). Hoje fora do cargo."},
+ pcfarias:{n:"Paulo César Farias",p:"PRN",d:"Tesoureiro de campanha de Collor; assassinado em 1996."},
+ maluf:{n:"Paulo Maluf",p:"PP",d:"Ex-prefeito e ex-governador de São Paulo."},
+ dirceu:{n:"José Dirceu",p:"PT",d:"Ex-ministro-chefe da Casa Civil."},
+ genoino:{n:"José Genoino",p:"PT",d:"Ex-presidente do PT."},
+ delubio:{n:"Delúbio Soares",p:"PT",d:"Ex-tesoureiro do PT."},
+ valerio:{n:"Marcos Valério",p:"",d:"Publicitário, operador financeiro dos esquemas de Minas e do mensalão."},
+ jefferson:{n:"Roberto Jefferson",p:"PTB",d:"Ex-deputado; denunciou o mensalão e foi condenado no mesmo processo."},
+ valdemar:{n:"Valdemar Costa Neto",p:"PL",d:"Presidente nacional do PL."},
+ azeredo:{n:"Eduardo Azeredo",p:"PSDB",d:"Ex-governador de Minas Gerais."},
+ vedoin:{n:"Luiz Antônio Vedoin",p:"",d:"Empresário da máfia das ambulâncias."},
+ arruda:{n:"José Roberto Arruda",p:"DEM",d:"Ex-governador do Distrito Federal."},
+ lula:{n:"Luiz Inácio Lula da Silva",p:"PT",d:"Presidente da República."},
+ cunha:{n:"Eduardo Cunha",p:"MDB",d:"Ex-presidente da Câmara; hoje no Republicanos."},
+ cabral:{n:"Sérgio Cabral",p:"MDB",d:"Ex-governador do Rio de Janeiro."},
+ palocci:{n:"Antonio Palocci",p:"PT",d:"Ex-ministro da Fazenda e da Casa Civil."},
+ vaccari:{n:"João Vaccari Neto",p:"PT",d:"Ex-tesoureiro do PT."},
+ odebrecht:{n:"Marcelo Odebrecht",p:"",d:"Ex-presidente da construtora Odebrecht."},
+ costa:{n:"Paulo Roberto Costa",p:"",d:"Ex-diretor da Petrobras; delator."},
+ youssef:{n:"Alberto Youssef",p:"",d:"Doleiro; delator."},
+ aecio:{n:"Aécio Neves",p:"PSDB",d:"Ex-senador e ex-governador de Minas."},
+ temer:{n:"Michel Temer",p:"MDB",d:"Ex-presidente da República."},
+ lira:{n:"Arthur Lira",p:"PP",d:"Ex-presidente da Câmara."},
+ camilo:{n:"Antônio Carlos Camilo Antunes (“Careca do INSS”)",p:"",d:"Apontado pelas investigações como figura do esquema de descontos."},
+ vorcaro:{n:"Daniel Vorcaro",p:"",d:"Dono do Banco Master."},
+ flavio:{n:"Flávio Bolsonaro",p:"PL",d:"Senador."}
+};
+const R=(t,tx)=>({t,tx});
+const CASES=[
+ {id:"collor",n:"Caso Collor / PC Farias",y:1992,s:"arq",par:["PRN"],
+  d:"Esquema de arrecadação paralela e tráfico de influência ligado ao tesoureiro PC Farias levou ao impeachment de Collor em 1992.",
+  st:"Impeachment em 1992; absolvido pelo STF na ação penal (1994). Em 2023, foi condenado pelo STF em outro caso (veja Lava Jato).",
+  pp:{collor:R("arq","Impeachment; absolvido na ação penal de 1994"),pcfarias:R("arq","Assassinado em 1996")}},
+ {id:"anoes",n:"Anões do Orçamento",y:1993,s:"def",par:["MDB","DEM"],
+  d:"Parlamentares manipulavam emendas do Orçamento da União para favorecer empreiteiras e entidades. A CPI revelou o esquema.",
+  st:"10 deputados perderam o mandato: 4 renunciaram e 6 foram cassados. Envolvidos de vários partidos.",pp:{}},
+ {id:"reeleicao",n:"Compra de votos da reeleição",y:1997,s:"arq",par:["PSDB","DEM"],
+  d:"Gravações publicadas pela imprensa sugeriram pagamento a deputados do Acre pelo voto na emenda da reeleição.",
+  st:"Dois deputados renunciaram; não houve condenação de integrantes do governo.",pp:{}},
+ {id:"azeredo",n:"Mensalão tucano (Minas Gerais)",y:1998,s:"def",par:["PSDB"],
+  d:"Desvio de recursos de estatais mineiras e agências de Marcos Valério para a campanha de 1998 em Minas.",
+  st:"Azeredo foi condenado em segunda instância pelo TJ-MG.",
+  pp:{azeredo:R("def","Condenado pelo TJ-MG"),valerio:R("def","Condenado por esquemas ligados a Valério")}},
+ {id:"mensalao",n:"Mensalão (AP 470)",y:2005,s:"def",par:["PT","PTB","PL","PP"],
+  d:"Pagamentos periódicos a parlamentares da base aliada do governo Lula em troca de apoio no Congresso, operados por Marcos Valério.",
+  st:"STF condenou 25 réus em 2012; as condenações da AP 470 foram mantidas.",
+  pp:{dirceu:R("def","Condenado na AP 470"),genoino:R("def","Condenado na AP 470"),delubio:R("def","Condenado na AP 470"),valerio:R("def","Condenado"),jefferson:R("def","Condenado e delator"),valdemar:R("def","Condenado na AP 470")}},
+ {id:"sangue",n:"Sanguessugas (máfia das ambulâncias)",y:2006,s:"inv",par:["MDB","PT","PP","PL","PSDB","DEM"],
+  d:"Esquema de emendas parlamentares para compra superfaturada de ambulâncias.",
+  st:"Dezenas de parlamentares de vários partidos investigados; desfechos variam por processo.",
+  pp:{vedoin:R("def","Empresário, figura central do esquema")}},
+ {id:"pandora",n:"Caixa de Pandora (DF)",y:2009,s:"inv",par:["DEM"],
+  d:"Vídeos mostraram pagamento de propina a integrantes do governo do Distrito Federal.",
+  st:"Arruda foi preso preventivamente em 2010 e perdeu o cargo; processos tiveram desfechos distintos.",
+  pp:{arruda:R("inv","Preso preventivamente em 2010")}},
+ {id:"maluf",n:"Contas no exterior (Maluf)",y:2017,s:"def",par:["PP"],
+  d:"Lavagem de dinheiro de desvios em obras públicas da cidade de São Paulo.",
+  st:"Condenado pelo STF em 2017 por lavagem de dinheiro.",pp:{maluf:R("def","Condenado pelo STF")}},
+ {id:"lavajato",n:"Lava Jato / Petrolão",y:2014,s:"anu",par:["PT","MDB","PP","PTB"],
+  d:"Pagamento de propinas por empreiteiras em contratos da Petrobras, com repasse a políticos e partidos.",
+  st:"Cerca de 174 condenações, 120 delações e R$ 4,3 bi devolvidos (balanços citados pela imprensa). O STF anulou muitas condenações por incompetência da 13ª Vara de Curitiba e por suspeição de Moro. Críticos falam em desmonte do combate à corrupção; defensores, em correção de ilegalidades.",
+  pp:{lula:R("anu","Condenações anuladas pelo STF (2021)"),dirceu:R("anu","Condenação da Lava Jato derrubada pelo STF"),palocci:R("anu","Condenações anuladas (a delação segue válida)"),vaccari:R("anu","Condenações anuladas"),cunha:R("anu","Condenação anulada por incompetência"),odebrecht:R("anu","Decisões anuladas pelo STF"),costa:R("def","Delator"),youssef:R("def","Delator"),collor:R("def","Condenado pelo STF em 2023 (8 anos e 10 meses)")},
+  src:[["Isto É Dinheiro: anulações","https://www.istoedinheiro.com.br/tribunais-revogam-277-anos-de-penas-em-processos-de-casos-de-corrupcao/"]]},
+ {id:"cabral",n:"Esquema Cabral (RJ)",y:2016,s:"inv",par:["MDB"],
+  d:"Propinas em obras e contratos do governo do Rio de Janeiro, no âmbito da Lava Jato fluminense.",
+  st:"Várias condenações foram anuladas; outras seguem ativas. Consulte processo a processo.",
+  pp:{cabral:R("inv","Parte das condenações anulada; outras ativas")}},
+ {id:"jbs",n:"Delação da JBS",y:2017,s:"inv",par:["MDB","PSDB"],
+  d:"Delação de Joesley Batista citou pagamentos a políticos.",
+  st:"Denúncias contra Temer foram barradas pela Câmara (2017). Aécio tornou-se réu no STF (2019); consulte o desfecho nos autos.",
+  pp:{temer:R("arq","Denúncias barradas pela Câmara"),aecio:R("inv","Tornou-se réu em 2019")}},
+ {id:"rachadinha",n:"Rachadinha (gabinete, RJ)",y:2018,s:"arq",par:["PL"],
+  d:"Investigação sobre devolução de salários de assessores no gabinete estadual de Flávio Bolsonaro.",
+  st:"O STJ anulou decisões que embasavam a investigação (2021).",
+  pp:{flavio:R("arq","Provas anuladas pelo STJ")}},
+ {id:"emendas",n:"Orçamento secreto / emendas",y:2020,s:"inv",par:["PP","PL","REP"],
+  d:"Emendas de relator e outras emendas distribuídas sem transparência. O STF (min. Dino) determinou investigações da PF.",
+  st:"Em apuração; a PGR pediu condenação de deputados do PL em uma ação penal. Segundo a imprensa, bens de Cunha e Valdemar foram bloqueados em 2026.",
+  pp:{lira:R("inv","Citado em decisões do STF"),valdemar:R("inv","PF aponta influência sobre emendas; ele nega irregularidade"),cunha:R("inv","Bens bloqueados, segundo a imprensa")},
+  src:[["Correio da Manhã","https://www.correiodamanha.com.br/politica/2026/07/301785-stf-mira-possivel-novo-orcamento-secreto.html"]]},
+ {id:"inss",n:"Fraude dos descontos do INSS",y:2025,s:"inv",par:["PT","PL"],
+  d:"Descontos associativos não autorizados em aposentadorias. Foi deflagrada em 2025 pela PF e pela CGU, com CPMI no Congresso.",
+  st:"Em apuração. R$ 2,9 bi devolvidos às vítimas (jan/2026). Relatórios políticos divergem: situação culpa o governo Bolsonaro; oposição mira o governo atual.",
+  pp:{camilo:R("inv","Investigado")},
+  src:[["Congresso em Foco: CPMI","https://www.congressoemfoco.com.br/noticia/117519/cpmi-do-inss-completa-180-dias-em-meio-a-polemicas-e-investigacao"]]},
+ {id:"master",n:"Banco Master",y:2025,s:"inv",par:[],
+  d:"Fraude financeira investigada pela PF (Operação Compliance Zero). Liquidado em 18/11/2025, com ligações com o consignado do INSS.",
+  st:"Em apuração no STF e na PF. A defesa de Vorcaro afirma que o banco seguiu as normas.",
+  pp:{vorcaro:R("inv","Investigado; defesa nega irregularidades")}}
+];
+const links=[["inss","master"],["lavajato","cabral"]];
+const $=s=>document.querySelector(s);
+const PER=[[0,9999],[1988,1999],[2000,2013],[2014,2020],[2021,9999]];
+let selParts=new Set(),nodes=[],edges=[];
+const svg=$("#g"),NS="http://www.w3.org/2000/svg";
+const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":">"}[c]));
+
+function filtered(){
+  const q=$("#q").value.toLowerCase(),[a,b]=PER[$("#per").value],st=$("#st").value;
+  return CASES.filter(c=>{
+    if(c.y<a||c.y>b)return false;
+    const hit=Object.values(c.pp).some(r=>r.t===st);
+    if(st&&c.s!==st&&!hit)return false;
+    if(selParts.size&&!c.par.some(p=>selParts.has(p))&&!Object.keys(c.pp).some(k=>selParts.has(PEOPLE[k].p)))return false;
+    if(q){const hay=(c.n+c.d+c.par.map(p=>PART[p]).join(" ")+Object.keys(c.pp).map(k=>PEOPLE[k].n).join(" ")).toLowerCase();if(!hay.includes(q))return false}
+    return true});
+}
+function build(){
+  const cs=filtered(),N=new Map(),E=[];
+  const add=(id,t,l)=>{if(!N.has(id))N.set(id,{id,t,l,x:0,y:0,vx:0,vy:0});return N.get(id)};
+  cs.forEach(c=>{add("c:"+c.id,"c",c.n);
+    c.par.forEach(p=>{add("g:"+p,"g",PART[p]);E.push(["c:"+c.id,"g:"+p])});
+    Object.keys(c.pp).forEach(k=>{add("p:"+k,"p",PEOPLE[k].n.split(" (")[0]);E.push(["c:"+c.id,"p:"+k]);
+      const pt=PEOPLE[k].p;if(pt&&PART[pt]&&N.has("g:"+pt))E.push(["p:"+k,"g:"+pt])})});
+  links.forEach(([a,b])=>{if(N.has("c:"+a)&&N.has("c:"+b))E.push(["c:"+a,"c:"+b])});
+  nodes=[...N.values()];edges=E.map(([a,b])=>[N.get(a),N.get(b)]);
+  layout();draw();renderTL(cs);
+}
+function layout(){
+  const W=svg.clientWidth||700,H=560;
+  nodes.forEach((n,i)=>{const a=i*2.4;n.x=W/2+Math.cos(a)*(40+i*5);n.y=H/2+Math.sin(a)*(40+i*4)});
+  for(let k=0;k<350;k++){const t=1-k/350;
+    for(const a of nodes)for(const b of nodes){if(a===b)continue;let dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy+.1,f=2600/d2*t;const d=Math.sqrt(d2);a.vx+=dx/d*f;a.vy+=dy/d*f}
+    for(const[a,b]of edges){const dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1,f=(d-95)*.02;a.vx+=dx/d*f;a.vy+=dy/d*f;b.vx-=dx/d*f;b.vy-=dy/d*f}
+    for(const n of nodes){n.vx+=(W/2-n.x)*.003;n.vy+=(H/2-n.y)*.003;n.x+=n.vx*.6;n.y+=n.vy*.6;n.vx*=.6;n.vy*=.6;n.x=Math.max(30,Math.min(W-30,n.x));n.y=Math.max(20,Math.min(H-20,n.y))}}
+}
+const COL={c:"var(--pri)",p:"#16a34a",g:"#9333ea"},RAD={c:11,p:7,g:9};
+function draw(){
+  svg.innerHTML="";
+  const gl=document.createElementNS(NS,"g");svg.appendChild(gl);
+  edges.forEach(e=>{const l=document.createElementNS(NS,"line");l.setAttribute("stroke","var(--bd)");l.setAttribute("stroke-width","1.4");e.l=l;gl.appendChild(l)});
+  nodes.forEach(n=>{const g=document.createElementNS(NS,"g");g.style.cursor="pointer";
+    const c=document.createElementNS(NS,"circle");c.setAttribute("r",RAD[n.t]);c.setAttribute("fill",COL[n.t]);
+    const t=document.createElementNS(NS,"text");t.setAttribute("dy",-RAD[n.t]-4);t.setAttribute("text-anchor","middle");t.textContent=n.l;
+    g.append(c,t);svg.appendChild(g);n.g=g;
+    let drag=false,moved=false;
+    g.addEventListener("pointerdown",ev=>{drag=true;moved=false;g.setPointerCapture(ev.pointerId)});
+    g.addEventListener("pointermove",ev=>{if(!drag)return;moved=true;const r=svg.getBoundingClientRect();n.x=ev.clientX-r.left;n.y=ev.clientY-r.top;place()});
+    g.addEventListener("pointerup",()=>{drag=false;if(!moved)show(n)})});
+  place();
+}
+function place(){nodes.forEach(n=>n.g.setAttribute("transform",`translate(${n.x},${n.y})`));
+  edges.forEach(([a,b,],i)=>{const l=edges[i].l;l.setAttribute("x1",a.x);l.setAttribute("y1",a.y);l.setAttribute("x2",b.x);l.setAttribute("y2",b.y)})}
+const tag=s=>`<span class="tag ${s}">${ST[s]}</span>`;
+function caseHTML(c){
+  return `<h2>${esc(c.n)}</h2><div class="yr">${c.y}</div>${tag(c.s)}<p>${esc(c.d)}</p><p><b>Situação:</b> ${esc(c.st)}</p>
+  ${c.par.length?`<p><b>Partidos ligados:</b> ${c.par.map(p=>PART[p]).join(", ")}</p>`:""}
+  ${Object.keys(c.pp).length?"<b>Pessoas e status:</b>"+Object.entries(c.pp).map(([k,r])=>`<div class="li"><b>${esc(PEOPLE[k].n)}</b> ${PEOPLE[k].p?`<span style="color:var(--mut)">(${PART[PEOPLE[k].p]})</span>`:""}<br>${tag(r.t)} ${esc(r.tx)}</div>`).join(""):""}
+  ${(c.src||[]).map(s=>`<p><a href="${s[1]}" target="_blank" rel="noopener">${esc(s[0])}</a></p>`).join("")}`;
+}
+function show(n){
+  const [k,id]=[n.id.slice(0,1),n.id.slice(2)],s=$("#side");
+  if(k==="c")s.innerHTML=caseHTML(CASES.find(c=>c.id===id));
+  if(k==="p"){const p=PEOPLE[id];s.innerHTML=`<h2>${esc(p.n)}</h2><p style="color:var(--mut)">${esc(p.d)} ${p.p?"Partido: "+PART[p.p]:""}</p>`+
+    CASES.filter(c=>c.pp[id]).map(c=>`<div class="li"><b>${esc(c.n)}</b> (${c.y})<br>${tag(c.pp[id].t)} ${esc(c.pp[id].tx)}</div>`).join("")}
+  if(k==="g"){s.innerHTML=`<h2>${PART[id]}</h2><p style="color:var(--mut)">Casos em que o partido aparece (como alvo, governo ou filiação de envolvidos):</p>`+
+    CASES.filter(c=>c.par.includes(id)).map(c=>`<div class="li"><b>${esc(c.n)}</b> (${c.y}) ${tag(c.s)}</div>`).join("")}
+}
+function renderTL(cs){
+  $("#tl").innerHTML=[...cs].sort((a,b)=>a.y-b.y).map(c=>`<div class="cd" data-id="${c.id}"><span class="yr">${c.y}</span>${tag(c.s)}<b>${esc(c.n)}</b><span style="color:var(--mut);font-size:13px">${esc(c.d)}</span></div>`).join("")||"<p>Nada encontrado com esses filtros.</p>";
+  document.querySelectorAll(".cd").forEach(d=>d.onclick=()=>{$("#side").innerHTML=caseHTML(CASES.find(c=>c.id===d.dataset.id));scrollTo({top:0,behavior:"smooth"})});
+}
+$("#chips").innerHTML=Object.entries(PART).map(([k,v])=>`<button class="chip" data-p="${k}">${v}</button>`).join("");
+document.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{const p=b.dataset.p;selParts.has(p)?selParts.delete(p):selParts.add(p);b.classList.toggle("on");build()});
+["q","per","st"].forEach(i=>$("#"+i).addEventListener("input",build));
+addEventListener("resize",()=>{layout();draw()});
+build();
+</script>
+</body>
+</html>
